@@ -1,0 +1,63 @@
+<%- include('partials/header') %>
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h4 class="mb-4">새 콘텐츠 추가</h4>
+    <form method="POST" action="/add">
+      <div class="mb-3">
+        <label class="form-label fw-bold">제목 <span class="text-danger">*</span></label>
+        <input type="text" name="title" class="form-control" required placeholder="영화 또는 드라마 제목">
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label class="form-label fw-bold">종류 <span class="text-danger">*</span></label>
+          <select name="type" class="form-select" required>
+            <option value="">선택</option>
+            <option value="영화">영화</option>
+            <option value="드라마">드라마</option>
+          </select>
+        </div>
+        <div class="col">
+          <label class="form-label fw-bold">장르 <span class="text-danger">*</span></label>
+          <input type="text" name="genre" class="form-control" required placeholder="액션, 로맨스, 공포...">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label class="form-label fw-bold">상태 <span class="text-danger">*</span></label>
+          <select name="status" class="form-select" required>
+            <option value="">선택</option>
+            <option value="봄">봄</option>
+            <option value="보는중">보는중</option>
+            <option value="보고싶음">보고싶음</option>
+          </select>
+        </div>
+        <div class="col">
+          <label class="form-label fw-bold">평점</label>
+          <select name="rating" class="form-select">
+            <option value="">없음</option>
+            <option value="1">★ 1점</option>
+            <option value="2">★★ 2점</option>
+            <option value="3">★★★ 3점</option>
+            <option value="4">★★★★ 4점</option>
+            <option value="5">★★★★★ 5점</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold">감상일</label>
+        <input type="date" name="watchedAt" class="form-control">
+      </div>
+      <div class="mb-4">
+        <label class="form-label fw-bold">감상평</label>
+        <textarea name="memo" class="form-control" rows="3" placeholder="한 줄 감상평을 남겨보세요"></textarea>
+      </div>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">저장</button>
+        <a href="/" class="btn btn-outline-secondary">취소</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

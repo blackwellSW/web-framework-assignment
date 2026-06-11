@@ -1,0 +1,60 @@
+<%- include('partials/header') %>
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h4 class="mb-4">콘텐츠 수정</h4>
+    <form method="POST" action="/<%= content._id %>/edit">
+      <div class="mb-3">
+        <label class="form-label fw-bold">제목 <span class="text-danger">*</span></label>
+        <input type="text" name="title" class="form-control" required value="<%= content.title %>">
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label class="form-label fw-bold">종류 <span class="text-danger">*</span></label>
+          <select name="type" class="form-select" required>
+            <option value="영화" <%= content.type === '영화' ? 'selected' : '' %>>영화</option>
+            <option value="드라마" <%= content.type === '드라마' ? 'selected' : '' %>>드라마</option>
+          </select>
+        </div>
+        <div class="col">
+          <label class="form-label fw-bold">장르 <span class="text-danger">*</span></label>
+          <input type="text" name="genre" class="form-control" required value="<%= content.genre %>">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label class="form-label fw-bold">상태 <span class="text-danger">*</span></label>
+          <select name="status" class="form-select" required>
+            <option value="봄" <%= content.status === '봄' ? 'selected' : '' %>>봄</option>
+            <option value="보는중" <%= content.status === '보는중' ? 'selected' : '' %>>보는중</option>
+            <option value="보고싶음" <%= content.status === '보고싶음' ? 'selected' : '' %>>보고싶음</option>
+          </select>
+        </div>
+        <div class="col">
+          <label class="form-label fw-bold">평점</label>
+          <select name="rating" class="form-select">
+            <option value="">없음</option>
+            <% for(let i = 1; i <= 5; i++) { %>
+              <option value="<%= i %>" <%= content.rating === i ? 'selected' : '' %>><%= '★'.repeat(i) %> <%= i %>점</option>
+            <% } %>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-bold">감상일</label>
+        <input type="date" name="watchedAt" class="form-control"
+          value="<%= content.watchedAt ? new Date(content.watchedAt).toISOString().split('T')[0] : '' %>">
+      </div>
+      <div class="mb-4">
+        <label class="form-label fw-bold">감상평</label>
+        <textarea name="memo" class="form-control" rows="3"><%= content.memo || '' %></textarea>
+      </div>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-warning">수정 완료</button>
+        <a href="/<%= content._id %>" class="btn btn-outline-secondary">취소</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

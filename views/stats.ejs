@@ -1,0 +1,73 @@
+<%- include('partials/header') %>
+
+<h4 class="mb-4">감상 통계</h4>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <div class="fs-2 fw-bold text-primary"><%= total %></div>
+        <div class="text-muted small">전체</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <div class="fs-2 fw-bold text-success"><%= watched %></div>
+        <div class="text-muted small">봄</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <div class="fs-2 fw-bold text-warning"><%= watching %></div>
+        <div class="text-muted small">보는중</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <div class="fs-2 fw-bold text-secondary"><%= wishlist %></div>
+        <div class="text-muted small">보고싶음</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-body text-center">
+        <div class="text-muted mb-1">평균 평점</div>
+        <div class="fs-1 fw-bold text-warning"><%= avgRating %></div>
+        <div class="text-muted small">/ 5점</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h6 class="fw-bold mb-3">장르별 기록 수</h6>
+        <% if (byGenre.length === 0) { %>
+          <p class="text-muted">데이터 없음</p>
+        <% } else { %>
+          <% byGenre.forEach(g => { %>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span><%= g._id %></span>
+              <span class="badge bg-primary rounded-pill"><%= g.count %></span>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-3">
+  <a href="/" class="btn btn-outline-secondary btn-sm">← 목록으로</a>
+</div>
+
+<%- include('partials/footer') %>

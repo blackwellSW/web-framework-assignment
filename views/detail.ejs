@@ -1,0 +1,46 @@
+<%- include('partials/header') %>
+
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <div>
+        <span class="badge bg-<%= content.type === '영화' ? 'primary' : 'success' %> me-2"><%= content.type %></span>
+        <span class="badge status-badge status-<%= content.status %>"><%= content.status %></span>
+      </div>
+      <a href="/" class="btn btn-outline-secondary btn-sm">← 목록</a>
+    </div>
+
+    <h3 class="fw-bold mb-1"><%= content.title %></h3>
+    <p class="text-muted mb-3"><%= content.genre %></p>
+
+    <% if (content.rating) { %>
+      <div class="mb-3">
+        <% for(let i = 1; i <= 5; i++) { %>
+          <i class="bi bi-star<%= i <= content.rating ? '-fill text-warning' : ' text-secondary' %> fs-5"></i>
+        <% } %>
+        <span class="ms-1 text-muted"><%= content.rating %>점</span>
+      </div>
+    <% } %>
+
+    <% if (content.watchedAt) { %>
+      <p class="text-muted small"><i class="bi bi-calendar3"></i> 감상일: <%= new Date(content.watchedAt).toLocaleDateString('ko-KR') %></p>
+    <% } %>
+
+    <% if (content.memo) { %>
+      <div class="card bg-light mt-3">
+        <div class="card-body">
+          <p class="mb-0"><%= content.memo %></p>
+        </div>
+      </div>
+    <% } %>
+
+    <div class="d-flex gap-2 mt-4">
+      <a href="/<%= content._id %>/edit" class="btn btn-warning btn-sm">수정</a>
+      <form method="POST" action="/<%= content._id %>/delete" onsubmit="return confirm('삭제하시겠습니까?')">
+        <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

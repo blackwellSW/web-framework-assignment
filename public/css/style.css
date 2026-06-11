@@ -1,0 +1,17 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.card-hover:hover {
+  transform: translateY(-3px);
+  transition: transform 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+}
+
+.status-봄 { background-color: #198754; color: white; }
+.status-보는중 { background-color: #ffc107; color: black; }
+.status-보고싶음 { background-color: #6c757d; color: white; }
