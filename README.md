@@ -99,12 +99,3 @@ node server.js
 2. Render → **New Web Service** → GitHub 저장소 연결
 3. Environment Variables에 `MONGODB_URI` 추가
 4. **Deploy** 클릭
-
----
-
-## 제출 일정
-
-| 날짜 | 내용 |
-|------|------|
-| 6월 17일 | Render URL 과제 게시판 사전 제출 |
-| 6월 21일 | 프로젝트 완료 + 문서화 최종 제출 |
