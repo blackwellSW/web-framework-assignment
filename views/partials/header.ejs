@@ -3,19 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>콘텐츠 감상 기록기</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  <title>뷰로그</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="/"><i class="bi bi-film"></i> 감상 기록기</a>
-      <div class="d-flex gap-2">
-        <a href="/add" class="btn btn-primary btn-sm">+ 추가</a>
-        <a href="/stats" class="btn btn-outline-light btn-sm">통계</a>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <nav class="bg-white border-b border-slate-200 sticky top-0 z-10">
+    <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-1.5 font-semibold">
+        <span class="text-xl" aria-hidden="true">📽️</span>
+        <span class="text-slate-800">뷰로그</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="/add" class="btn-primary py-1.5">+ 추가</a>
+        <a href="/stats" class="btn-ghost py-1.5">통계</a>
+        <div class="flex items-center gap-2 pl-3 ml-1 border-l border-slate-200">
+          <span class="hidden sm:flex w-8 h-8 rounded-full bg-brand-100 text-brand-700 items-center justify-center text-sm font-medium"><%= user.username.charAt(0).toUpperCase() %></span>
+          <form method="POST" action="/logout">
+            <button type="submit" class="text-sm text-slate-500 hover:text-slate-800">로그아웃</button>
+          </form>
+        </div>
       </div>
     </div>
   </nav>
-  <div class="container mt-4">
+  <main class="max-w-5xl mx-auto px-4 py-6">

@@ -1,43 +1,56 @@
 <%- include('partials/header') %>
 
-<div class="row justify-content-center">
-  <div class="col-md-7">
-    <div class="d-flex justify-content-between align-items-start mb-3">
-      <div>
-        <span class="badge bg-<%= content.type === '영화' ? 'primary' : 'success' %> me-2"><%= content.type %></span>
-        <span class="badge status-badge status-<%= content.status %>"><%= content.status %></span>
-      </div>
-      <a href="/" class="btn btn-outline-secondary btn-sm">← 목록</a>
-    </div>
+<%
+  const typeBadge = {
+    '영화': 'bg-indigo-100 text-indigo-700',
+    '드라마': 'bg-emerald-100 text-emerald-700',
+    '애니메이션': 'bg-amber-100 text-amber-700',
+    '소설': 'bg-rose-100 text-rose-700',
+  };
+  const statusBadge = {
+    '봄': 'bg-emerald-100 text-emerald-700',
+    '보는중': 'bg-amber-100 text-amber-700',
+    '보고싶음': 'bg-slate-100 text-slate-600',
+  };
+%>
 
-    <h3 class="fw-bold mb-1"><%= content.title %></h3>
-    <p class="text-muted mb-3"><%= content.genre %></p>
+<div class="max-w-xl mx-auto">
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex gap-2">
+      <span class="text-xs px-2.5 py-1 rounded-full <%= typeBadge[content.type] %>"><%= content.type %></span>
+      <span class="text-xs px-2.5 py-1 rounded-full <%= statusBadge[content.status] %>"><%= content.status %></span>
+    </div>
+    <a href="/" class="btn-ghost py-1.5">← 목록</a>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-2xl p-6">
+    <h1 class="text-2xl font-semibold text-slate-800 mb-1"><%= content.title %></h1>
+    <p class="text-slate-500 mb-4"><%= content.genre %></p>
 
     <% if (content.rating) { %>
-      <div class="mb-3">
-        <% for(let i = 1; i <= 5; i++) { %>
-          <i class="bi bi-star<%= i <= content.rating ? '-fill text-warning' : ' text-secondary' %> fs-5"></i>
+      <div class="flex items-center gap-1 mb-4">
+        <% for (let i = 1; i <= 5; i++) { %>
+          <svg class="w-5 h-5 <%= i <= content.rating ? 'text-amber-400' : 'text-slate-200' %>" fill="currentColor" viewBox="0 0 20 20"><path d="M9.05 2.93c.3-.92 1.6-.92 1.9 0l1.36 4.18a1 1 0 0 0 .95.69h4.4c.97 0 1.37 1.24.59 1.81l-3.56 2.59a1 1 0 0 0-.36 1.12l1.36 4.18c.3.92-.76 1.69-1.54 1.12l-3.56-2.59a1 1 0 0 0-1.18 0l-3.56 2.59c-.78.57-1.84-.2-1.54-1.12l1.36-4.18a1 1 0 0 0-.36-1.12L2.1 9.6c-.78-.57-.38-1.81.59-1.81h4.4a1 1 0 0 0 .95-.69z"/></svg>
         <% } %>
-        <span class="ms-1 text-muted"><%= content.rating %>점</span>
+        <span class="ml-1 text-sm text-slate-500"><%= content.rating %>점</span>
       </div>
     <% } %>
 
     <% if (content.watchedAt) { %>
-      <p class="text-muted small"><i class="bi bi-calendar3"></i> 감상일: <%= new Date(content.watchedAt).toLocaleDateString('ko-KR') %></p>
+      <p class="text-sm text-slate-500 mb-3 flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        감상일 <%= new Date(content.watchedAt).toLocaleDateString('ko-KR') %>
+      </p>
     <% } %>
 
     <% if (content.memo) { %>
-      <div class="card bg-light mt-3">
-        <div class="card-body">
-          <p class="mb-0"><%= content.memo %></p>
-        </div>
-      </div>
+      <div class="mt-4 rounded-xl bg-slate-50 border border-slate-100 p-4 text-slate-700 whitespace-pre-line"><%= content.memo %></div>
     <% } %>
 
-    <div class="d-flex gap-2 mt-4">
-      <a href="/<%= content._id %>/edit" class="btn btn-warning btn-sm">수정</a>
+    <div class="flex gap-2 mt-6 pt-5 border-t border-slate-100">
+      <a href="/<%= content._id %>/edit" class="btn-primary">수정</a>
       <form method="POST" action="/<%= content._id %>/delete" onsubmit="return confirm('삭제하시겠습니까?')">
-        <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+        <button type="submit" class="btn-danger">삭제</button>
       </form>
     </div>
   </div>

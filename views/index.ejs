@@ -1,64 +1,114 @@
 <%- include('partials/header') %>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h4 class="mb-0">전체 기록 <span class="badge bg-secondary"><%= contents.length %></span></h4>
+<%
+  const typeConfig = {
+    '영화':       { badge: 'bg-indigo-100 text-indigo-700', bar: '#6366f1', emoji: '🎬' },
+    '드라마':     { badge: 'bg-emerald-100 text-emerald-700', bar: '#10b981', emoji: '📺' },
+    '애니메이션': { badge: 'bg-amber-100 text-amber-700', bar: '#f59e0b', emoji: '✨' },
+    '소설':       { badge: 'bg-rose-100 text-rose-700', bar: '#e11d48', emoji: '📖' },
+  };
+  const statusStyle = {
+    '봄':       'bg-emerald-100 text-emerald-700',
+    '보는중':   'bg-amber-100 text-amber-700',
+    '보고싶음': 'bg-slate-100 text-slate-600',
+  };
+%>
+
+<!-- 통계 스트립 -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+  <div class="bg-white border border-slate-200 rounded-xl px-4 py-3">
+    <div class="text-sm text-slate-500">전체</div>
+    <div class="text-2xl font-semibold"><%= stats.total %></div>
+  </div>
+  <div class="bg-white border border-slate-200 rounded-xl px-4 py-3">
+    <div class="text-sm text-slate-500">봄</div>
+    <div class="text-2xl font-semibold text-emerald-600"><%= stats.watched %></div>
+  </div>
+  <div class="bg-white border border-slate-200 rounded-xl px-4 py-3">
+    <div class="text-sm text-slate-500">보는중</div>
+    <div class="text-2xl font-semibold text-amber-500"><%= stats.watching %></div>
+  </div>
+  <div class="bg-white border border-slate-200 rounded-xl px-4 py-3">
+    <div class="text-sm text-slate-500">보고싶음</div>
+    <div class="text-2xl font-semibold text-slate-500"><%= stats.wishlist %></div>
+  </div>
 </div>
 
-<!-- 필터 -->
-<form method="GET" action="/" class="row g-2 mb-4">
-  <div class="col-auto">
-    <select name="status" class="form-select form-select-sm">
-      <option value="">전체 상태</option>
-      <option value="봄" <%= selectedStatus === '봄' ? 'selected' : '' %>>봄</option>
-      <option value="보는중" <%= selectedStatus === '보는중' ? 'selected' : '' %>>보는중</option>
-      <option value="보고싶음" <%= selectedStatus === '보고싶음' ? 'selected' : '' %>>보고싶음</option>
-    </select>
+<!-- 검색 / 필터 / 정렬 -->
+<form method="GET" action="/" class="mb-6 space-y-3">
+  <div class="flex gap-2">
+    <input type="text" name="q" value="<%= query %>" class="field" placeholder="제목 검색...">
+    <button type="submit" class="btn-primary shrink-0">검색</button>
   </div>
-  <div class="col-auto">
-    <select name="genre" class="form-select form-select-sm">
+
+  <div class="flex flex-wrap gap-2">
+    <%
+      const chipLabels = { '': '전체', '영화': '🎬 영화', '드라마': '📺 드라마', '애니메이션': '✨ 애니메이션', '소설': '📖 소설' };
+    %>
+    <% ['', '영화', '드라마', '애니메이션', '소설'].forEach(t => { %>
+      <label class="chip cursor-pointer <%= selectedType === t ? 'chip-active' : '' %>">
+        <input type="radio" name="type" value="<%= t %>" class="hidden" <%= selectedType === t ? 'checked' : '' %> onchange="this.form.submit()">
+        <%= chipLabels[t] %>
+      </label>
+    <% }) %>
+  </div>
+
+  <div class="flex flex-wrap gap-2 items-center">
+    <select name="status" class="field w-auto" onchange="this.form.submit()">
+      <option value="">전체 상태</option>
+      <% ['봄', '보는중', '보고싶음'].forEach(s => { %>
+        <option value="<%= s %>" <%= selectedStatus === s ? 'selected' : '' %>><%= s %></option>
+      <% }) %>
+    </select>
+    <select name="genre" class="field w-auto" onchange="this.form.submit()">
       <option value="">전체 장르</option>
       <% genres.forEach(g => { %>
         <option value="<%= g %>" <%= selectedGenre === g ? 'selected' : '' %>><%= g %></option>
       <% }) %>
     </select>
-  </div>
-  <div class="col-auto">
-    <button type="submit" class="btn btn-outline-secondary btn-sm">필터 적용</button>
-    <a href="/" class="btn btn-outline-secondary btn-sm">초기화</a>
+    <select name="sort" class="field w-auto" onchange="this.form.submit()">
+      <option value="recent" <%= sort === 'recent' ? 'selected' : '' %>>최신순</option>
+      <option value="rating" <%= sort === 'rating' ? 'selected' : '' %>>평점순</option>
+      <option value="title"  <%= sort === 'title'  ? 'selected' : '' %>>제목순</option>
+    </select>
+    <a href="/" class="btn-ghost py-2">초기화</a>
   </div>
 </form>
 
-<!-- 카드 목록 -->
+<div class="flex items-center justify-between mb-3">
+  <h2 class="text-base font-medium text-slate-700">기록 <span class="text-slate-400 ml-1"><%= contents.length %></span></h2>
+</div>
+
 <% if (contents.length === 0) { %>
-  <div class="text-center text-muted py-5">
-    <i class="bi bi-camera-reels fs-1"></i>
-    <p class="mt-2">기록된 콘텐츠가 없습니다. 추가해보세요!</p>
-    <a href="/add" class="btn btn-primary">+ 첫 기록 추가</a>
+  <div class="text-center text-slate-400 py-16 bg-white border border-dashed border-slate-200 rounded-2xl">
+    <div class="text-4xl mb-3" aria-hidden="true">📽️</div>
+    <p class="mb-4">조건에 맞는 기록이 없습니다.</p>
+    <a href="/add" class="btn-primary">+ 첫 기록 추가</a>
   </div>
 <% } else { %>
-  <div class="row row-cols-1 row-cols-md-3 g-3">
-    <% contents.forEach(c => { %>
-      <div class="col">
-        <a href="/<%= c._id %>" class="text-decoration-none">
-          <div class="card h-100 shadow-sm card-hover">
-            <div class="card-body">
-              <div class="d-flex justify-content-between">
-                <span class="badge bg-<%= c.type === '영화' ? 'primary' : 'success' %> mb-2"><%= c.type %></span>
-                <span class="badge status-badge status-<%= c.status %>"><%= c.status %></span>
-              </div>
-              <h6 class="card-title fw-bold text-dark"><%= c.title %></h6>
-              <p class="card-text text-muted small"><%= c.genre %></p>
-              <% if (c.rating) { %>
-                <div class="stars">
-                  <% for(let i = 1; i <= 5; i++) { %>
-                    <i class="bi bi-star<%= i <= c.rating ? '-fill text-warning' : ' text-secondary' %>"></i>
-                  <% } %>
-                </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <% contents.forEach(c => { const tc = typeConfig[c.type] || typeConfig['영화']; %>
+      <a href="/<%= c._id %>" class="flex bg-white border border-slate-200 rounded-2xl overflow-hidden card-hover">
+        <div style="width:6px; background:<%= tc.bar %>; flex-shrink:0;"></div>
+        <div class="p-3 flex-1 min-w-0">
+          <div class="text-2xl mb-2" aria-hidden="true"><%= tc.emoji %></div>
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs px-2 py-0.5 rounded-full <%= tc.badge %>"><%= c.type %></span>
+            <span class="text-xs px-2 py-0.5 rounded-full <%= statusStyle[c.status] %>"><%= c.status %></span>
+          </div>
+          <h3 class="font-medium text-slate-800 truncate"><%= c.title %></h3>
+          <p class="text-sm text-slate-500 mb-2 truncate"><%= c.genre %></p>
+          <% if (c.rating) { %>
+            <div class="flex gap-0.5">
+              <% for (let i = 1; i <= 5; i++) { %>
+                <svg class="w-4 h-4 <%= i <= c.rating ? 'text-amber-400' : 'text-slate-200' %>" fill="currentColor" viewBox="0 0 20 20"><path d="M9.05 2.93c.3-.92 1.6-.92 1.9 0l1.36 4.18a1 1 0 0 0 .95.69h4.4c.97 0 1.37 1.24.59 1.81l-3.56 2.59a1 1 0 0 0-.36 1.12l1.36 4.18c.3.92-.76 1.69-1.54 1.12l-3.56-2.59a1 1 0 0 0-1.18 0l-3.56 2.59c-.78.57-1.84-.2-1.54-1.12l1.36-4.18a1 1 0 0 0-.36-1.12L2.1 9.6c-.78-.57-.38-1.81.59-1.81h4.4a1 1 0 0 0 .95-.69z"/></svg>
               <% } %>
             </div>
-          </div>
-        </a>
-      </div>
+          <% } else { %>
+            <span class="text-xs text-slate-400">평점 미정</span>
+          <% } %>
+        </div>
+      </a>
     <% }) %>
   </div>
 <% } %>
