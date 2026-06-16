@@ -136,21 +136,3 @@ npm start
 ```
 
 브라우저에서 `http://localhost:3000` 접속 후 회원가입
-
-> CSS 수정 시에는 `src/input.css`를 편집하고 `npm run build:css` 재실행.  
-> 개발 중에는 `npm run watch:css`로 자동 빌드.
-
----
-
-## 배포 (Render)
-
-1. GitHub에 push
-2. Render → **New Web Service** → GitHub 저장소 연결
-3. 설정:
-   - **Build Command**: `npm install && npm run build:css`
-   - **Start Command**: `node server.js`
-4. Environment Variables 추가:
-   - `MONGODB_URI`
-   - `JWT_SECRET`
-   - `NODE_ENV` = `production`
-5. **Deploy** 클릭
